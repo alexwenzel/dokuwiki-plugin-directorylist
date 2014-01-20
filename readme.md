@@ -1,11 +1,27 @@
 # Usage
 
 ````
-<directorylist: path="D:\wamp\www\ausbildungsnachweis\ano\app">
+<directorylist: argument="value">
 ````
 
-## Path parameter
+## Path argument
 
-The path parameter specifies the path to list.
+The path argument specifies the path to list.
 
 This can be an unix or windows path.
+
+It can be absolute or relative.
+
+````
+<directorylist: path="./relative/path/in/dokuwiki">
+````
+
+## Ingore argument
+
+You can ignore directories or files with the ignore argument.
+
+The ignore argument has to be a comma separated [shell pattern](http://www.php.net/manual/en/function.fnmatch.php).
+
+````
+<directorylist: ignore="*.pdf,*.js,specialfile.doc,some_*_files.xlsx">
+````

@@ -38,7 +38,7 @@ class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
 	/**
 	 * Connect lookup pattern to lexer.
 	 *
-	 * @param string $mode Parser mode
+	 * @param  string $mode Parser mode
 	 * @return void
 	 */
 	public function connectTo($mode)
@@ -50,10 +50,10 @@ class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
 	/**
 	 * Handle matches of the directorylist syntax
 	 *
-	 * @param string $match The match of the syntax
-	 * @param int    $state The state of the handler
-	 * @param int    $pos The position in the document
-	 * @param Doku_Handler    $handler The handler
+	 * @param  string $match The match of the syntax
+	 * @param  int    $state The state of the handler
+	 * @param  int    $pos The position in the document
+	 * @param  Doku_Handler    $handler The handler
 	 * @return array Data for the renderer
 	 */
 	public function handle($match, $state, $pos, Doku_Handler &$handler)
@@ -76,9 +76,9 @@ class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
 	/**
 	 * Render xhtml output or metadata
 	 *
-	 * @param string         $mode      Renderer mode (supported modes: xhtml)
-	 * @param Doku_Renderer  $renderer  The renderer
-	 * @param array          $data      The data from the handler() function
+	 * @param  string         $mode      Renderer mode (supported modes: xhtml)
+	 * @param  Doku_Renderer  $renderer  The renderer
+	 * @param  array          $data      The data from the handler() function
 	 * @return bool 					If rendering was successful.
 	 */
 	public function render($mode, Doku_Renderer &$renderer, $data)
@@ -86,7 +86,7 @@ class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
 		if($mode != 'xhtml') return false;
 
 		// get all directories and files
-		$dirArray = $this->convert($data['path']);
+		$dirArray = $this->convert($data['path'], $data['ignore']);
 
 		// start walking down
 		$renderer->doc .= '<ul>';
@@ -124,29 +124,56 @@ class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
 
 	/**
 	 * Reads the directory recursivly and returns all items packed in an array
-	 * @param  string $startpath
+	 * @see    http://www.php.net/manual/pt_BR/class.recursivedirectoryiterator.php#111142
+	 * @see    http://www.php.net/manual/en/function.fnmatch.php
+	 * @param  string $path
 	 * @return array
 	 */
-	private function convert($startpath)
+	private function convert($path, $ignore)
 	{
-		$ritit = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($startpath), RecursiveIteratorIterator::CHILD_FIRST);
+		$ritit = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST);
 
 		$r = array();
 
 		foreach ($ritit as $splFileInfo) {
 
-			$path = $splFileInfo->isDir()
-				? array($splFileInfo->getFilename() => array())
-				: array($splFileInfo->getFilename());
+			if ( ! $this->fileIsIgnored($ignore, $splFileInfo->getFilename()) ) {
 
-			for ($depth = $ritit->getDepth() - 1; $depth >= 0; $depth--) {
-				$path = array($ritit->getSubIterator($depth)->current()->getFilename() => $path);
+				$path = $splFileInfo->isDir()
+					? array($splFileInfo->getFilename() => array())
+					: array($splFileInfo->getFilename());
+
+				for ($depth = $ritit->getDepth() - 1; $depth >= 0; $depth--) {
+					$path = array($ritit->getSubIterator($depth)->current()->getFilename() => $path);
+				}
+
+				$r = array_merge_recursive($r, $path);
 			}
-
-			$r = array_merge_recursive($r, $path);
 		}
 
 		return $r;
+	}
+
+	/**
+	 * Returns, whether the file is ignored or not
+	 * @param  string $ignorePattern
+	 * @param  string $filename
+	 * @return bool
+	 */
+	private function fileIsIgnored($ignorePattern, $filename)
+	{
+		// explode the ignore argument
+		$patternArray = explode(',', $ignorePattern);
+
+		// iterate through all given patterns
+		foreach ($patternArray as $pattern) {
+
+			// is there a match
+			if ( fnmatch($pattern, $filename) )
+				return true;
+		}
+
+		return false;
 	}
 
 	private function showError($description)
