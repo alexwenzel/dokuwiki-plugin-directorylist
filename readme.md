@@ -1,3 +1,8 @@
+# Requirements
+
+  * PHP >= 5.3
+  * PHP fileinfo extension
+
 # Usage
 
 ````

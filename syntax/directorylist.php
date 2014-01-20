@@ -2,14 +2,13 @@
 /**
  * DokuWiki Plugin directorylist (Syntax Component)
  *
- * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  alexwenzel <alexander.wenzel.berlin@gmail.com>
  */
 
 // must be run within Dokuwiki
 if (!defined('DOKU_INC')) die();
 
-class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
+class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 {
 	/**
 	 * @return string Syntax mode type
@@ -112,12 +111,13 @@ class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
 				// this is the start of a new sub directory
 				$renderer->doc .= '<li>'.$key.'<ul>';
 				$this->walkDirArray($renderer, $value);
-				$renderer->doc .= '<ul></li>';
+				$renderer->doc .= '</ul></li>';
 			}
-			else {
+			else if ( $value instanceof SplFileInfo ) {
 
-				// no sub directory
-				$renderer->doc .= '<li>'.$value.'</li>';
+				// no sub directory, but
+				$renderer->doc .= '<li><a href="?do=download&file='.rawurlencode($value->getRealPath()).'" target="_blank">'
+					.$value->getFilename().'</a></li>';
 			}
 		}
 	}
@@ -126,7 +126,9 @@ class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
 	 * Reads the directory recursivly and returns all items packed in an array
 	 * @see    http://www.php.net/manual/pt_BR/class.recursivedirectoryiterator.php#111142
 	 * @see    http://www.php.net/manual/en/function.fnmatch.php
+	 * @see    http://de2.php.net/manual/en/class.splfileinfo.php
 	 * @param  string $path
+	 * @param  string $ignore
 	 * @return array
 	 */
 	private function convert($path, $ignore)
@@ -141,7 +143,7 @@ class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
 
 				$path = $splFileInfo->isDir()
 					? array($splFileInfo->getFilename() => array())
-					: array($splFileInfo->getFilename());
+					: array($splFileInfo);
 
 				for ($depth = $ritit->getDepth() - 1; $depth >= 0; $depth--) {
 					$path = array($ritit->getSubIterator($depth)->current()->getFilename() => $path);
@@ -174,6 +176,14 @@ class syntax_plugin_directorylist_directorylist extends DokuWiki_Syntax_Plugin
 		}
 
 		return false;
+	}
+
+	function formatBytes($size, $precision = 2)
+	{
+		$base = log($size) / log(1024);
+		$suffixes = array('', 'k', 'M', 'G', 'T');
+
+		return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
 	}
 
 	private function showError($description)
