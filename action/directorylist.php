@@ -22,6 +22,7 @@ class Action_Plugin_Directorylist_Directorylist extends Dokuwiki_Action_Plugin
 
 	/**
 	 * Checks the action for the keyword to download files
+	 * @see http://www.php.net/manual/en/function.finfo-open.php
 	 * @param  Doku_Event $event
 	 * @return void
 	 */
@@ -41,6 +42,7 @@ class Action_Plugin_Directorylist_Directorylist extends Dokuwiki_Action_Plugin
 			header("Content-disposition: attachment; filename=".basename($file));
 			header("Content-type: ".$mimetype);
 			readfile($file);
+			die();
 		}
 	}
 }
