@@ -1,6 +1,6 @@
 <?php
 /**
- * DokuWiki Plugin directorylist (Syntax Component)
+ * DokuWiki Plugin directorylist (Action Component)
  * 
  * @author  alexwenzel <alexander.wenzel.berlin@gmail.com>
  */
