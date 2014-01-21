@@ -35,20 +35,17 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 	}
 
 	/**
-	 * Connect lookup pattern to lexer.
-	 *
+	 * Connect lookup pattern to lexer
 	 * @param  string $mode Parser mode
 	 * @return void
 	 */
 	public function connectTo($mode)
 	{
 		$this->Lexer->addSpecialPattern('<directorylist.+?>',$mode,'plugin_directorylist_directorylist');
-	   // $this->Lexer->addEntryPattern('<FIXME>',$mode,'plugin_directorylist_directorylist');
 	}
 
 	/**
 	 * Handle matches of the directorylist syntax
-	 *
 	 * @param  string $match The match of the syntax
 	 * @param  int    $state The state of the handler
 	 * @param  int    $pos The position in the document
@@ -74,7 +71,6 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 
 	/**
 	 * Render xhtml output or metadata
-	 *
 	 * @param  string         $mode      Renderer mode (supported modes: xhtml)
 	 * @param  Doku_Renderer  $renderer  The renderer
 	 * @param  array          $data      The data from the handler() function
@@ -212,11 +208,6 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 		$link .= '</a>';
 
 		return $link;
-	}
-
-	private function showError($description)
-	{
-
 	}
 }
 

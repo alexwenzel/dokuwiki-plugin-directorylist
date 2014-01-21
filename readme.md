@@ -4,7 +4,9 @@ Specify a directory and this plugin will list all contained items and made them 
 
 This is mostly used for intranets.
 
-**Information:** Please be aware, that a wiki user can pick ANY directory on your maschine. I am not responsible for any problems.
+**Information #1:** This is still under development and not finished or secured.
+
+**Information #2:** Please be aware, that a wiki user can pick ANY directory on your maschine. I am not responsible for any problems.
 
 ## Example
 
