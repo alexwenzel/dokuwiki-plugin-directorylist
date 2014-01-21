@@ -1,0 +1,22 @@
+ul.directorylist {
+
+}
+
+ul.directorylist li.folder {
+	text-transform: uppercase;
+	padding: 10px 0px;
+	font-weight: bold;
+	list-style-image: url(img/black_gallerylink.png);
+}
+
+ul.directorylist li.file {
+	display: block;
+	border-bottom: 1px solid #ccc;
+	margin: 2px 0px;
+	text-transform: none;
+	font-weight: normal;
+}
+
+ul.directorylist span.size {
+	float: right;
+}

@@ -84,11 +84,13 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 	{
 		if($mode != 'xhtml') return false;
 
+		// TODO: check & validate $data
+
 		// get all directories and files
 		$dirArray = $this->convert($data['path'], $data['ignore']);
 
 		// start walking down
-		$renderer->doc .= '<ul>';
+		$renderer->doc .= '<ul class="directorylist">';
 		$this->walkDirArray($renderer, $dirArray);
 		$renderer->doc .= '</ul>';
 
@@ -97,35 +99,8 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 	}
 
 	/**
-	 * Walks down the directory array
-	 * @param  Doku_Renderer $renderer
-	 * @param  array         $dirArray
-	 * @return void
-	 */
-	private function walkDirArray(Doku_Renderer &$renderer, array $dirArray)
-	{
-		foreach ($dirArray as $key => $value) {
-
-			if ( is_array($value) ) {
-
-				// this is the start of a new sub directory
-				$renderer->doc .= '<li>'.$key.'<ul>';
-				$this->walkDirArray($renderer, $value);
-				$renderer->doc .= '</ul></li>';
-			}
-			else if ( $value instanceof SplFileInfo ) {
-
-				// no sub directory, but
-				$renderer->doc .= '<li><a href="?do=download&file='.rawurlencode($value->getRealPath()).'" target="_blank">'
-					.$value->getFilename().'</a></li>';
-			}
-		}
-	}
-
-	/**
 	 * Reads the directory recursivly and returns all items packed in an array
 	 * @see    http://www.php.net/manual/pt_BR/class.recursivedirectoryiterator.php#111142
-	 * @see    http://www.php.net/manual/en/function.fnmatch.php
 	 * @see    http://de2.php.net/manual/en/class.splfileinfo.php
 	 * @param  string $path
 	 * @param  string $ignore
@@ -133,7 +108,8 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 	 */
 	private function convert($path, $ignore)
 	{
-		$ritit = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST);
+		$directory = new RecursiveDirectoryIterator($path);
+		$ritit = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::CHILD_FIRST);
 
 		$r = array();
 
@@ -153,11 +129,40 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 			}
 		}
 
+		// sorting
+		arsort($r);
+
 		return $r;
 	}
 
 	/**
+	 * Walks down the directory array
+	 * @param  Doku_Renderer $renderer
+	 * @param  array         $dirArray
+	 * @return void
+	 */
+	private function walkDirArray(Doku_Renderer &$renderer, array $dirArray)
+	{
+		foreach ($dirArray as $key => $value) {
+
+			if ( is_array($value) ) {
+
+				// this is the start of a new sub directory
+				$renderer->doc .= '<li class="folder">'.$key.'<ul>';
+				$this->walkDirArray($renderer, $value);
+				$renderer->doc .= '</ul></li>';
+			}
+			else if ( $value instanceof SplFileInfo ) {
+
+				// no sub directory, but
+				$renderer->doc .= '<li class="file">'.$this->formatLink($value).$this->formatBytes($value).'</li>';
+			}
+		}
+	}
+
+	/**
 	 * Returns, whether the file is ignored or not
+	 * @see    http://www.php.net/manual/en/function.fnmatch.php
 	 * @param  string $ignorePattern
 	 * @param  string $filename
 	 * @return bool
@@ -178,12 +183,35 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 		return false;
 	}
 
-	function formatBytes($size, $precision = 2)
+	/**
+	 * Returns the filesize for a given file
+	 * @param  SplFileInfo $file
+	 * @param  integer     $precision
+	 * @return string
+	 */
+	private function formatBytes(SplFileInfo $file, $precision = 2)
 	{
-		$base = log($size) / log(1024);
-		$suffixes = array('', 'k', 'M', 'G', 'T');
+		$base = log($file->getSize()) / log(1024);
+		$suffixes = array('B', 'kB', 'MB', 'GB', 'TB');
 
-		return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+		$return = round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+
+		return '<span class="size">'.$return.'</span>';
+	}
+
+	/**
+	 * Returns the link tag for a given file
+	 * @param  string $filepath
+	 * @return string
+	 */
+	private function formatLink(SplFileInfo $file)
+	{
+		$link = '<a href="?do=download&file='.rawurlencode($file->getRealPath()).'" target="_blank" ';
+		$link .= 'title="'.$file->getFilename().'">';
+		$link .= $file->getFilename();
+		$link .= '</a>';
+
+		return $link;
 	}
 
 	private function showError($description)
