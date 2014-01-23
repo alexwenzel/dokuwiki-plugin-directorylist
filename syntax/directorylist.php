@@ -95,11 +95,12 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 			// TODO: check & validate $data
 
 			// get all directories and files
-			$dirArray = $this->convert($data['path'], $data['ignore']);
+			require_once "SplFileArray.php";
+			$fs = new SplFileArray($data['path']);
 
 			// start walking down
 			$this->renderer->doc .= '<ul class="directorylist">';
-			$this->walkDirArray($dirArray);
+			$this->walkDirArray( $fs->get() );
 			$this->renderer->doc .= '</ul>';
 			
 		} catch (Exception $e) {
@@ -110,43 +111,6 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 
 		// finished
 		return true;
-	}
-
-	/**
-	 * Reads the directory recursivly and returns all items packed in an array
-	 * @see    http://www.php.net/manual/pt_BR/class.recursivedirectoryiterator.php#111142
-	 * @see    http://de2.php.net/manual/en/class.splfileinfo.php
-	 * @param  string $path
-	 * @param  string $ignore
-	 * @return array
-	 */
-	private function convert($path, $ignore)
-	{
-		$directory = new RecursiveDirectoryIterator($path);
-		$ritit = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::CHILD_FIRST);
-
-		$r = array();
-
-		foreach ($ritit as $splFileInfo) {
-
-			if ( ! $this->fileIsIgnored($ignore, $splFileInfo->getFilename()) ) {
-
-				$path = $splFileInfo->isDir()
-					? array($splFileInfo->getFilename() => array())
-					: array($splFileInfo);
-
-				for ($depth = $ritit->getDepth() - 1; $depth >= 0; $depth--) {
-					$path = array($ritit->getSubIterator($depth)->current()->getFilename() => $path);
-				}
-
-				$r = array_merge_recursive($r, $path);
-			}
-		}
-
-		// sorting
-		arsort($r);
-
-		return $r;
 	}
 
 	/**
