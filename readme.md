@@ -23,46 +23,49 @@ This is mostly used for intranets.
 <directorylist: path="value" ignore="value" recursive="1">
 ````
 
-### Path argument
+#### Path argument
 
 The path argument specifies the path which the directorylist plugin will list.
 
 This can be an unix or windows path. It can be absolute or relative.
 
-**Example:**
+**Examples:**
 
 ````
 <directorylist: path="./relative/path/in/dokuwiki">
+<directorylist: path="C:\Users\Public">
 ````
 
-### Ingore argument
+#### Ingore argument
 
 You can ignore directories or files with the ignore argument.
 
 The ignore argument has to be a comma separated [shell pattern](http://www.php.net/manual/en/function.fnmatch.php).
 
+This argument is optional, the  value is empty.
+
 **Example:**
 
 ````
-<directorylist: ignore="*.pdf,*.js,specialfile.doc,some_*_files.xlsx">
+<directorylist: [...] ignore="*.pdf,*.js,specialfile.doc,some_*_files.xlsx">
 ````
 
-### Recursive argument
+#### Recursive argument
 
 You can specify if you want to list your directory recursive or not.
 
-The default value is: ``true``
+This argument is optional, the default value is: ``true``
 
-**Example:**
-
-````
-<directorylist: recursive="0">
-<directorylist: recursive="1">
-````
+**Examples:**
 
 ````
-<directorylist: recursive="false">
-<directorylist: recursive="true">
+<directorylist: [...] recursive="0">
+<directorylist: [...] recursive="1">
+````
+
+````
+<directorylist: [...] recursive="false">
+<directorylist: [...] recursive="true">
 ````
 ## Information
 
