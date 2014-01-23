@@ -49,7 +49,7 @@ The ignore argument has to be a comma separated [shell pattern](http://www.php.n
 
 ### Recursive argument
 
-You can specify if you want to scan your directory recursive or not.
+You can specify if you want to list your directory recursive or not.
 
 The default value is: ``true``
 

@@ -96,7 +96,13 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 			if ( ! isset($data['recursive']) || empty($data['recursive']) ) 
 				$data['recursive'] = true;
 
+			// check and set default: ignore argument
+			if ( ! isset($data['ignore']) || empty($data['ignore']) ) 
+				$data['ignore'] = '';
+
 			// TODO: check & validate $data
+
+			var_dump($data);
 
 			// get all directories and files
 			require_once "SplFileArray.php";
@@ -104,7 +110,7 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 
 			// start walking down
 			$this->renderer->doc .= '<ul class="directorylist">';
-			$this->walkDirArray( $fs->get() );
+			$this->walkDirArray( $fs->get() , $data['ignore']);
 			$this->renderer->doc .= '</ul>';
 			
 		} catch (Exception $e) {
@@ -122,21 +128,26 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 	 * @param  array         $dirArray
 	 * @return void
 	 */
-	private function walkDirArray(array $dirArray)
+	private function walkDirArray(array $dirArray, $ignored)
 	{
 		foreach ($dirArray as $key => $value) {
 
-			if ( is_array($value) ) {
+			// check if is ignored
+			if ( ! $this->isIgnored($ignored, $key) ) {
 
-				// this is the start of a new sub directory
-				$this->renderer->doc .= '<li class="folder">'.$key.'<ul>';
-				$this->walkDirArray($value);
-				$this->renderer->doc .= '</ul></li>';
-			}
-			else if ( $value instanceof SplFileInfo ) {
+				// check if is directory
+				if ( is_array($value) ) {
 
-				// no sub directory, but file
-				$this->renderer->doc .= '<li class="file">'.$this->formatLink($value).$this->formatBytes($value).'</li>';
+					// this is the start of a new sub directory
+					$this->renderer->doc .= '<li class="folder">'.$key.'<ul>';
+					$this->walkDirArray($value, $ignored);
+					$this->renderer->doc .= '</ul></li>';
+				}
+				else if ( $value instanceof SplFileInfo ) {
+
+					// not directory, but file
+					$this->renderer->doc .= '<li class="file">'.$this->formatLink($value).$this->formatBytes($value).'</li>';
+				}
 			}
 		}
 	}
@@ -145,11 +156,15 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 	 * Returns, whether the file is ignored or not
 	 * @see    http://www.php.net/manual/en/function.fnmatch.php
 	 * @param  string $ignorePattern
-	 * @param  string $filename
+	 * @param  string $name
 	 * @return bool
 	 */
-	private function fileIsIgnored($ignorePattern, $filename)
+	private function isIgnored($ignorePattern, $name)
 	{
+		// not ignored if emtpy
+		if ( empty($ignorePattern) )
+			return false;
+
 		// explode the ignore argument
 		$patternArray = explode(',', $ignorePattern);
 
@@ -157,7 +172,7 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 		foreach ($patternArray as $pattern) {
 
 			// is there a match
-			if ( fnmatch($pattern, $filename) )
+			if ( fnmatch($pattern, $name) )
 				return true;
 		}
 
