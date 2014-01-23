@@ -1,7 +1,7 @@
 base   directorylist
 author alexwenzel
 email  alexander.wenzel.berlin@gmail.com
-date   2014-01-14
+date   2014-01-23
 name   directorylist plugin
 desc   shows a list of the specified directory inside your dokuwiki page
 url    http://awhost.cygnus.uberspace.de/wiki/wordpress:custom_post_types

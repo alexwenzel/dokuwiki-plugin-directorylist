@@ -11,6 +11,12 @@ if (!defined('DOKU_INC')) die();
 class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 {
 	/**
+	 * Doku_Renderer
+	 * @var Doku_Renderer
+	 */
+	private $renderer;
+
+	/**
 	 * @return string Syntax mode type
 	 */
 	public function getType()
@@ -78,17 +84,29 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 	 */
 	public function render($mode, Doku_Renderer &$renderer, $data)
 	{
+		// do not render if not in xhtml mode
 		if($mode != 'xhtml') return false;
 
-		// TODO: check & validate $data
+		// safe reference
+		$this->renderer = $renderer;
 
-		// get all directories and files
-		$dirArray = $this->convert($data['path'], $data['ignore']);
+		try {
 
-		// start walking down
-		$renderer->doc .= '<ul class="directorylist">';
-		$this->walkDirArray($renderer, $dirArray);
-		$renderer->doc .= '</ul>';
+			// TODO: check & validate $data
+
+			// get all directories and files
+			$dirArray = $this->convert($data['path'], $data['ignore']);
+
+			// start walking down
+			$this->renderer->doc .= '<ul class="directorylist">';
+			$this->walkDirArray($dirArray);
+			$this->renderer->doc .= '</ul>';
+			
+		} catch (Exception $e) {
+
+			$this->renderer->doc .= '<strong>directorylist error:</strong> ';
+			$this->renderer->doc .= $e->getMessage();
+		}
 
 		// finished
 		return true;
@@ -133,25 +151,24 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 
 	/**
 	 * Walks down the directory array
-	 * @param  Doku_Renderer $renderer
 	 * @param  array         $dirArray
 	 * @return void
 	 */
-	private function walkDirArray(Doku_Renderer &$renderer, array $dirArray)
+	private function walkDirArray(array $dirArray)
 	{
 		foreach ($dirArray as $key => $value) {
 
 			if ( is_array($value) ) {
 
 				// this is the start of a new sub directory
-				$renderer->doc .= '<li class="folder">'.$key.'<ul>';
-				$this->walkDirArray($renderer, $value);
-				$renderer->doc .= '</ul></li>';
+				$this->renderer->doc .= '<li class="folder">'.$key.'<ul>';
+				$this->walkDirArray($value);
+				$this->renderer->doc .= '</ul></li>';
 			}
 			else if ( $value instanceof SplFileInfo ) {
 
-				// no sub directory, but
-				$renderer->doc .= '<li class="file">'.$this->formatLink($value).$this->formatBytes($value).'</li>';
+				// no sub directory, but file
+				$this->renderer->doc .= '<li class="file">'.$this->formatLink($value).$this->formatBytes($value).'</li>';
 			}
 		}
 	}
