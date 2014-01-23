@@ -46,3 +46,11 @@ The ignore argument has to be a comma separated [shell pattern](http://www.php.n
 ````
 <directorylist: ignore="*.pdf,*.js,specialfile.doc,some_*_files.xlsx">
 ````
+
+## Information
+
+Author: Alexander Wenzel (alexander.wenzel.berlin@gmail.com)
+
+Plugin page: http://www.dokuwiki.org/plugin:directorylist
+
+Icons: [genericons.com](http://genericons.com)
