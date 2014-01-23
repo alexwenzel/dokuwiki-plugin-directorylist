@@ -190,7 +190,7 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 		$base = log($file->getSize()) / log(1024);
 		$suffixes = array('B', 'kB', 'MB', 'GB', 'TB');
 
-		$return = round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+		$return = round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
 
 		return '<span class="size">'.$return.'</span>';
 	}
