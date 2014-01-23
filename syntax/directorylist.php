@@ -100,9 +100,9 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 			if ( ! isset($data['ignore']) || empty($data['ignore']) ) 
 				$data['ignore'] = '';
 
-			// TODO: check & validate $data
-
-			var_dump($data);
+			// check: path argument
+			if ( ! isset($data['path']) || empty($data['path']) )
+				throw new Exception("A path is missing!");
 
 			// get all directories and files
 			require_once "SplFileArray.php";
