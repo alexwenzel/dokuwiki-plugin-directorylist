@@ -20,7 +20,7 @@ This is mostly used for intranets.
 ## Usage
 
 ````
-<directorylist: path="value" ignore="value">
+<directorylist: path="value" ignore="value" recursive="1">
 ````
 
 ### Path argument
@@ -47,6 +47,23 @@ The ignore argument has to be a comma separated [shell pattern](http://www.php.n
 <directorylist: ignore="*.pdf,*.js,specialfile.doc,some_*_files.xlsx">
 ````
 
+### Recursive argument
+
+You can specify if you want to scan your directory recursive or not.
+
+The default value is: ``true``
+
+**Example:**
+
+````
+<directorylist: recursive="0">
+<directorylist: recursive="1">
+````
+
+````
+<directorylist: recursive="false">
+<directorylist: recursive="true">
+````
 ## Information
 
 Author: Alexander Wenzel (alexander.wenzel.berlin@gmail.com)

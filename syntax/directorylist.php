@@ -92,11 +92,15 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 
 		try {
 
+			// check and set default: recursive argument
+			if ( ! isset($data['recursive']) || empty($data['recursive']) ) 
+				$data['recursive'] = true;
+
 			// TODO: check & validate $data
 
 			// get all directories and files
 			require_once "SplFileArray.php";
-			$fs = new SplFileArray($data['path']);
+			$fs = new SplFileArray($data['path'], (bool)$data['recursive']);
 
 			// start walking down
 			$this->renderer->doc .= '<ul class="directorylist">';
