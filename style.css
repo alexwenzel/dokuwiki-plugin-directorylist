@@ -28,7 +28,8 @@ ul.directorylist li.folder:before {
 
 ul.directorylist li.folder {
 	text-transform: uppercase;
-	padding: 10px 0px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	font-weight: bold;
 	list-style: none;
 	cursor: pointer;

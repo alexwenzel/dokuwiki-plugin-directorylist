@@ -67,6 +67,14 @@ This argument is optional, the default value is: ``true``
 <directorylist: [...] recursive="false">
 <directorylist: [...] recursive="true">
 ````
+## Styling
+
+You can style this plugin with the following elements:
+
+  * ``ul.directorylist``
+  * ``ul.directorylist li.file``
+  * ``ul.directorylist li.folder``
+
 ## Information
 
 Author: Alexander Wenzel (alexander.wenzel.berlin@gmail.com)
