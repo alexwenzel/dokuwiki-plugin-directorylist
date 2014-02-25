@@ -110,6 +110,7 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 
 			// start walking down
 			$this->renderer->doc .= '<ul class="directorylist">';
+			$this->renderer->doc .= '<li class="menu">up | down</li>';
 			$this->walkDirArray( $fs->get() , $data['ignore']);
 			$this->renderer->doc .= '</ul>';
 			
