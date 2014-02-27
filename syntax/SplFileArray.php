@@ -55,7 +55,6 @@ class SplFileArray
 		}
 
 		uasort($array, array($this, 'sortDir'));
-		uasort($array, array($this, 'sortDir'));
 
 		return $array;
 	}
