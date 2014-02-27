@@ -110,8 +110,7 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 
 			// start walking down
 			$this->renderer->doc .= '<ul class="directorylist">';
-			$this->renderer->doc .= '<li class="menu">up | down</li>';
-			$this->walkDirArray( $fs->get() , $data['ignore']);
+			$this->walkDirArray( $fs->get() , $data);
 			$this->renderer->doc .= '</ul>';
 			
 		} catch (Exception $e) {
@@ -129,19 +128,19 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 	 * @param  array         $dirArray
 	 * @return void
 	 */
-	private function walkDirArray(array $dirArray, $ignored)
+	private function walkDirArray(array $dirArray, array $data)
 	{
 		foreach ($dirArray as $key => $value) {
 
 			// check if is ignored
-			if ( ! $this->isIgnored($ignored, $key) ) {
+			if ( ! $this->isIgnored($data['ignored'], $key) ) {
 
 				// check if is directory
 				if ( is_array($value) ) {
 
 					// this is the start of a new sub directory
 					$this->renderer->doc .= '<li class="folder">'.$key.'<ul>';
-					$this->walkDirArray($value, $ignored);
+					$this->walkDirArray($value, $data);
 					$this->renderer->doc .= '</ul></li>';
 				}
 				else if ( $value instanceof SplFileInfo ) {
