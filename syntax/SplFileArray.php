@@ -13,12 +13,20 @@ class SplFileArray
 	private $filesystemarray = array();
 
 	/**
+	 * Order of files
+	 * @var string
+	 */
+	private $fileorder = 'asc';
+
+	/**
 	 * Constructor
 	 * @param string  $path      Path to collect
 	 * @param boolean $recursive Collect information recursivly or not
+	 * @param string  $order 	 Defines the sort order of files
 	 */
-	public function __construct($path, $recursive = true)
+	public function __construct($path, $recursive = true, $fileorder)
 	{
+		$this->fileorder = $fileorder;
 		$this->filesystemarray = $this->readdir($path, $recursive);
 	}
 
@@ -77,6 +85,9 @@ class SplFileArray
 		if ( $a->getFilename() == $b->getFilename() )
 			return 0;
 
-		return ($a->getFilename() > $b->getFilename()) ? +1 : -1;
+		if ( $this->fileorder === 'desc' )
+			return ($a->getFilename() < $b->getFilename()) ? +1 : -1;
+		else
+			return ($a->getFilename() > $b->getFilename()) ? +1 : -1;
 	}
 }

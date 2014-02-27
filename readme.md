@@ -20,10 +20,10 @@ This is mostly used for intranets.
 ## Usage
 
 ````
-<directorylist: path="value" ignore="value" recursive="1">
+<directorylist: path="value" ignore="value" recursive="1" fileorder="asc">
 ````
 
-#### Path argument
+### Path argument
 
 The path argument specifies the path which the directorylist plugin will list.
 
@@ -36,7 +36,7 @@ This can be an unix or windows path. It can be absolute or relative.
 <directorylist: path="C:\Users\Public">
 ````
 
-#### Ingore argument
+### Ingore argument
 
 You can ignore directories or files with the ignore argument.
 
@@ -50,11 +50,11 @@ This argument is optional, the  value is empty.
 <directorylist: [...] ignore="*.pdf,*.js,specialfile.doc,some_*_files.xlsx">
 ````
 
-#### Recursive argument
+### Recursive argument
 
 You can specify if you want to list your directory recursive or not.
 
-This argument is optional, the default value is: ``true``
+This argument is optional, the default value is: ``true``.
 
 **Examples:**
 
@@ -67,6 +67,20 @@ This argument is optional, the default value is: ``true``
 <directorylist: [...] recursive="false">
 <directorylist: [...] recursive="true">
 ````
+
+### Fileorder argument
+
+You can specify the order of files inside a directory.
+
+This argument is optional, the default value is: ``asc``.
+
+**Examples:**
+
+````
+<directorylist: [...] fileorder="asc">
+<directorylist: [...] fileorder="desc">
+````
+
 ## Styling
 
 You can style this plugin with the following elements:

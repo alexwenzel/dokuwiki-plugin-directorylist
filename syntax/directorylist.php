@@ -100,17 +100,25 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 			if ( ! isset($data['ignore']) || empty($data['ignore']) ) 
 				$data['ignore'] = '';
 
+			// check and set default: fileorder argument
+			if ( ! isset($data['fileorder']) || empty($data['fileorder']) ) 
+				$data['fileorder'] = 'asc';
+
 			// check: path argument
 			if ( ! isset($data['path']) || empty($data['path']) )
 				throw new Exception("A path is missing!");
 
 			// get all directories and files
 			require_once "SplFileArray.php";
-			$fs = new SplFileArray($data['path'], (bool)$data['recursive']);
+			$fs = new SplFileArray($data['path'], (bool)$data['recursive'], $data['fileorder']);
+
+			// get files
+			$files = $fs->get();
+
 
 			// start walking down
 			$this->renderer->doc .= '<ul class="directorylist">';
-			$this->walkDirArray( $fs->get() , $data);
+			$this->walkDirArray( $files , $data);
 			$this->renderer->doc .= '</ul>';
 			
 		} catch (Exception $e) {
