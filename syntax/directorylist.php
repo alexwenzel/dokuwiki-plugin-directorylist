@@ -104,6 +104,10 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 			if ( ! isset($data['fileorder']) || empty($data['fileorder']) ) 
 				$data['fileorder'] = 'asc';
 
+			// check and set default: type argument
+			if ( ! isset($data['type']) || empty($data['type']) ) 
+				$data['type'] = 'link';
+
 			// check: path argument
 			if ( ! isset($data['path']) || empty($data['path']) )
 				throw new Exception("A path is missing!");
@@ -154,7 +158,7 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 				else if ( $value instanceof SplFileInfo ) {
 
 					// not directory, but file
-					$this->renderer->doc .= '<li class="file">'.$this->formatLink($value).$this->formatBytes($value).'</li>';
+					$this->renderer->doc .= '<li class="file">'.$this->formatLink($value,$data).$this->formatBytes($value).'</li>';
 				}
 			}
 		}
@@ -203,15 +207,35 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 		return '<span class="size">'.$return.'</span>';
 	}
 
+
+
+
 	/**
 	 * Returns the link tag for a given file
 	 * @param  string $filepath
 	 * @return string
 	 */
-	private function formatLink(SplFileInfo $file)
+	private function formatLink(SplFileInfo $file, array $data)
 	{
-		$link = '<a href="?do=download&file='.rawurlencode($file->getRealPath()).'" target="_blank" ';
-		$link .= 'title="'.$file->getFilename().'">';
+		global $conf;
+
+		$link  = '<a href="';
+		if( $data['type']=='download' ) {
+		    $link .= '?do=download&file='.rawurlencode($file->getRealPath());
+		} else if( $data['type']=='direct' ) {
+		    $link .= 'file://'.$file->getRealPath();
+		} else if ($data['type']=='link'){
+		    $startpos = strpos( $file->getRealPath(), $conf['basedir'] );
+		    $link .= $conf['baseurl'].substr( $file->getRealPath(), $startpos);
+		} else {
+		    $link .= '';
+		}
+		$link .= '"';
+		if( $data['type']=='download' ) {
+		    $link .= ' target="_blank"';
+		}
+		$link .= ' title="'.$file->getFilename().'"';
+		$link .= '>';
 		$link .= utf8_encode($file->getFilename());
 		$link .= '</a>';
 
