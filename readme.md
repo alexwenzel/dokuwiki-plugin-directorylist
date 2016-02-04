@@ -81,6 +81,26 @@ This argument is optional, the default value is: ``asc``.
 <directorylist: [...] fileorder="desc">
 ````
 
+### Type argument
+
+Adding a new 'type' option to the directorylist syntax to enable different types of href link.
+
+This allows 'direct' links using the file:// protocal.
+(NOTE: this will usually not be a good choice since most browsers, eg. Chrome, forbid the openning of file:// links from non-local pages)
+
+Also allows 'link' links that, using the absolute path and dokuwiki basedir, serve weblinks to content.
+(NOTE: assumes the data directory is reachable by your webserver. This is a big security issue!)
+
+Default option is 'link';
+
+**Examples:**
+
+````
+<directorylist: [...] type="download">
+<directorylist: [...] type="direct">
+<directorylist: [...] type="link">
+````
+
 ## Styling
 
 You can style this plugin with the following elements:
@@ -96,3 +116,8 @@ Author: Alexander Wenzel (alexander.wenzel.berlin@gmail.com)
 Plugin page: http://www.dokuwiki.org/plugin:directorylist
 
 Icons: [genericons.com](http://genericons.com)
+
+## Changelog
+
+* 0.2.0
+    * added 'type' argument
