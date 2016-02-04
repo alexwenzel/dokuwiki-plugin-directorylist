@@ -91,7 +91,7 @@ This allows 'direct' links using the file:// protocal.
 Also allows 'link' links that, using the absolute path and dokuwiki basedir, serve weblinks to content.
 (NOTE: assumes the data directory is reachable by your webserver. This is a big security issue!)
 
-Default option is 'link';
+Default option is 'download';
 
 **Examples:**
 
@@ -119,5 +119,8 @@ Icons: [genericons.com](http://genericons.com)
 
 ## Changelog
 
+* 0.2.1
+    * PHP7 compatibility
+    * changed default 'type' to 'download'
 * 0.2.0
     * added 'type' argument

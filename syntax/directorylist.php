@@ -106,7 +106,7 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
 
 			// check and set default: type argument
 			if ( ! isset($data['type']) || empty($data['type']) ) 
-				$data['type'] = 'link';
+				$data['type'] = 'download';
 
 			// check: path argument
 			if ( ! isset($data['path']) || empty($data['path']) )
