@@ -1,7 +1,7 @@
 base   directorylist
 author alexwenzel
 email  alexander.wenzel.berlin@gmail.com
-date   2016-05-07
+date   2017-10-03
 name   directorylist plugin
 desc   Shows a list of the specified directory inside your dokuwiki page and made them downloadable.
 url    https://github.com/alexwenzel/dokuwiki-plugin-directorylist

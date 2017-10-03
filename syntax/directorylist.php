@@ -252,7 +252,7 @@ class Syntax_Plugin_Directorylist_Directorylist extends DokuWiki_Syntax_Plugin
         }
         $link .= ' title="'.$file->getFilename().'"';
         $link .= '>';
-        $link .= utf8_encode($file->getFilename());
+        $link .= $file->getFilename();
         $link .= '</a>';
 
         return $link;

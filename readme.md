@@ -127,6 +127,7 @@ Icons: [genericons.com](http://genericons.com)
 * 0.2.2
     * updated readme
     * fixed sorting bug
+    * fixed problems with chinese characters
 * 0.2.1
     * PHP7 compatibility
     * changed default 'type' to 'download'
