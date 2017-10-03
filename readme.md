@@ -8,6 +8,12 @@ This is mostly used for intranets.
 
 **Information #2:** Please be aware, that a wiki user can pick ANY directory on your maschine. I am not responsible for any problems.
 
+## Donations
+
+Please consider a donation, if you use my plugin for your business.
+
+[Donation with PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YP4LDRJFB9F94)
+
 ## Example
 
 ![Image](example1.png?raw=true)
