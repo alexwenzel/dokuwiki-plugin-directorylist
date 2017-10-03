@@ -63,6 +63,14 @@ class SplFileArray
 		}
 
 		uasort($array, array($this, 'sortDir'));
+		
+		// sort also top level directories
+		if ($this->fileorder === 'asc') {
+			ksort($array);
+		}
+		elseif ($this->fileorder === 'desc') {
+			krsort($array);
+		}
 
 		return $array;
 	}
