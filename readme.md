@@ -101,6 +101,12 @@ Default option is 'download';
 <directorylist: [...] type="link">
 ````
 
+## NOCACHE
+
+When the directory listing is not updating as you like, try to use the ``~~NOCACHE~~`` tag.
+
+https://www.dokuwiki.org/caching
+
 ## Styling
 
 You can style this plugin with the following elements:
@@ -118,7 +124,9 @@ Plugin page: http://www.dokuwiki.org/plugin:directorylist
 Icons: [genericons.com](http://genericons.com)
 
 ## Changelog
-
+* 0.2.2
+    * updated readme
+    * fixed sorting bug
 * 0.2.1
     * PHP7 compatibility
     * changed default 'type' to 'download'
